@@ -1,20 +1,21 @@
 package workflows
 
 import (
-	"github.com/checkout/checkout-sdk-go/workflows/reflows"
 	"net/http"
 	"testing"
+
+	"github.com/PaddleHQ/checkout-sdk-go/workflows/reflows"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 
-	"github.com/checkout/checkout-sdk-go/common"
-	"github.com/checkout/checkout-sdk-go/configuration"
-	"github.com/checkout/checkout-sdk-go/errors"
-	"github.com/checkout/checkout-sdk-go/mocks"
-	"github.com/checkout/checkout-sdk-go/workflows/actions"
-	"github.com/checkout/checkout-sdk-go/workflows/conditions"
-	"github.com/checkout/checkout-sdk-go/workflows/events"
+	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/configuration"
+	"github.com/PaddleHQ/checkout-sdk-go/errors"
+	"github.com/PaddleHQ/checkout-sdk-go/mocks"
+	"github.com/PaddleHQ/checkout-sdk-go/workflows/actions"
+	"github.com/PaddleHQ/checkout-sdk-go/workflows/conditions"
+	"github.com/PaddleHQ/checkout-sdk-go/workflows/events"
 )
 
 func TestCreateWorkflow(t *testing.T) {

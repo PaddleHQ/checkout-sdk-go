@@ -6,10 +6,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/checkout/checkout-sdk-go/common"
-	"github.com/checkout/checkout-sdk-go/errors"
+	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/errors"
 
-	issuingTesting "github.com/checkout/checkout-sdk-go/issuing/testing"
+	issuingTesting "github.com/PaddleHQ/checkout-sdk-go/issuing/testing"
 )
 
 func TestSimulateAuthorization(t *testing.T) {

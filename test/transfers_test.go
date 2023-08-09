@@ -8,8 +8,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/checkout/checkout-sdk-go/errors"
-	"github.com/checkout/checkout-sdk-go/transfers"
+	"github.com/PaddleHQ/checkout-sdk-go/errors"
+	"github.com/PaddleHQ/checkout-sdk-go/transfers"
 )
 
 func TestInitiateTransferOfFounds(t *testing.T) {

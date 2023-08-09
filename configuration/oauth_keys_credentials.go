@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/checkout/checkout-sdk-go/errors"
+	"github.com/PaddleHQ/checkout-sdk-go/errors"
 )
 
 type (

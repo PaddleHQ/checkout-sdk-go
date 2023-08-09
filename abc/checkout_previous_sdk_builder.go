@@ -3,7 +3,7 @@ package abc
 import (
 	"net/http"
 
-	"github.com/checkout/checkout-sdk-go/configuration"
+	"github.com/PaddleHQ/checkout-sdk-go/configuration"
 )
 
 type CheckoutPreviousSdkBuilder struct {

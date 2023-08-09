@@ -1,9 +1,10 @@
 package apm
 
 import (
-	"github.com/checkout/checkout-sdk-go/common"
-	"github.com/checkout/checkout-sdk-go/payments"
 	"time"
+
+	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/payments"
 )
 
 type BillingPlanType string

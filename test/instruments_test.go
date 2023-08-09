@@ -6,10 +6,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/checkout/checkout-sdk-go/common"
-	"github.com/checkout/checkout-sdk-go/errors"
-	"github.com/checkout/checkout-sdk-go/instruments/nas"
-	"github.com/checkout/checkout-sdk-go/tokens"
+	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/errors"
+	"github.com/PaddleHQ/checkout-sdk-go/instruments/nas"
+	"github.com/PaddleHQ/checkout-sdk-go/tokens"
 )
 
 var (

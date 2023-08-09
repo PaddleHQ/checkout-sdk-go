@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/checkout/checkout-sdk-go/sources"
+	"github.com/PaddleHQ/checkout-sdk-go/sources"
 )
 
 func TestShouldCreateSepaSource(t *testing.T) {

@@ -8,8 +8,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/checkout/checkout-sdk-go/payments"
-	"github.com/checkout/checkout-sdk-go/payments/nas"
+	"github.com/PaddleHQ/checkout-sdk-go/payments"
+	"github.com/PaddleHQ/checkout-sdk-go/payments/nas"
 )
 
 func TestVoidCardPayment(t *testing.T) {

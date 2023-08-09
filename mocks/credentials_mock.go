@@ -3,7 +3,7 @@ package mocks
 import (
 	"github.com/stretchr/testify/mock"
 
-	"github.com/checkout/checkout-sdk-go/configuration"
+	"github.com/PaddleHQ/checkout-sdk-go/configuration"
 )
 
 type (

@@ -1,10 +1,10 @@
 package sessions
 
 import (
-	"github.com/checkout/checkout-sdk-go/client"
-	"github.com/checkout/checkout-sdk-go/common"
-	"github.com/checkout/checkout-sdk-go/configuration"
-	"github.com/checkout/checkout-sdk-go/sessions/channels"
+	"github.com/PaddleHQ/checkout-sdk-go/client"
+	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/configuration"
+	"github.com/PaddleHQ/checkout-sdk-go/sessions/channels"
 )
 
 type Client struct {

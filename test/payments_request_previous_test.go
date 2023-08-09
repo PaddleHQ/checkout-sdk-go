@@ -1,14 +1,15 @@
 package test
 
 import (
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
 	"testing"
 
-	"github.com/checkout/checkout-sdk-go/common"
-	"github.com/checkout/checkout-sdk-go/payments"
-	"github.com/checkout/checkout-sdk-go/payments/abc"
-	"github.com/checkout/checkout-sdk-go/payments/abc/sources"
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+
+	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/payments"
+	"github.com/PaddleHQ/checkout-sdk-go/payments/abc"
+	"github.com/PaddleHQ/checkout-sdk-go/payments/abc/sources"
 )
 
 func TestRequestPaymentListPrevious(t *testing.T) {

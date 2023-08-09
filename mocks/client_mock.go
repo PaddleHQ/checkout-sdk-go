@@ -2,10 +2,11 @@ package mocks
 
 import (
 	"context"
+
 	"github.com/stretchr/testify/mock"
 
-	"github.com/checkout/checkout-sdk-go/common"
-	"github.com/checkout/checkout-sdk-go/configuration"
+	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/configuration"
 )
 
 type (
