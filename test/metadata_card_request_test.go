@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/checkout/checkout-sdk-go/metadata"
-	"github.com/checkout/checkout-sdk-go/metadata/sources"
+	"github.com/PaddleHQ/checkout-sdk-go/metadata"
+	"github.com/PaddleHQ/checkout-sdk-go/metadata/sources"
 )
 
 func TestCardMetadataSources(t *testing.T) {

@@ -7,15 +7,15 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/checkout/checkout-sdk-go"
-	"github.com/checkout/checkout-sdk-go/common"
-	"github.com/checkout/checkout-sdk-go/configuration"
-	issuingTesting "github.com/checkout/checkout-sdk-go/issuing/testing"
-	"github.com/checkout/checkout-sdk-go/nas"
+	"github.com/PaddleHQ/checkout-sdk-go"
+	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/configuration"
+	issuingTesting "github.com/PaddleHQ/checkout-sdk-go/issuing/testing"
+	"github.com/PaddleHQ/checkout-sdk-go/nas"
 
-	cardholders "github.com/checkout/checkout-sdk-go/issuing/cardholders"
-	cards "github.com/checkout/checkout-sdk-go/issuing/cards"
-	controls "github.com/checkout/checkout-sdk-go/issuing/controls"
+	cardholders "github.com/PaddleHQ/checkout-sdk-go/issuing/cardholders"
+	cards "github.com/PaddleHQ/checkout-sdk-go/issuing/cards"
+	controls "github.com/PaddleHQ/checkout-sdk-go/issuing/controls"
 )
 
 var (

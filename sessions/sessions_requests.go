@@ -1,10 +1,10 @@
 package sessions
 
 import (
-	"github.com/checkout/checkout-sdk-go/common"
-	"github.com/checkout/checkout-sdk-go/sessions/channels"
-	"github.com/checkout/checkout-sdk-go/sessions/completion"
-	"github.com/checkout/checkout-sdk-go/sessions/sources"
+	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/sessions/channels"
+	"github.com/PaddleHQ/checkout-sdk-go/sessions/completion"
+	"github.com/PaddleHQ/checkout-sdk-go/sessions/sources"
 )
 
 type AuthenticationMethod string

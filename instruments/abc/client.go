@@ -2,10 +2,11 @@ package abc
 
 import (
 	"context"
-	"github.com/checkout/checkout-sdk-go/client"
-	"github.com/checkout/checkout-sdk-go/common"
-	"github.com/checkout/checkout-sdk-go/configuration"
-	"github.com/checkout/checkout-sdk-go/instruments"
+
+	"github.com/PaddleHQ/checkout-sdk-go/client"
+	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/configuration"
+	"github.com/PaddleHQ/checkout-sdk-go/instruments"
 )
 
 type Client struct {

@@ -7,8 +7,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/checkout/checkout-sdk-go/configuration"
-	"github.com/checkout/checkout-sdk-go/errors"
+	"github.com/PaddleHQ/checkout-sdk-go/configuration"
+	"github.com/PaddleHQ/checkout-sdk-go/errors"
 )
 
 func TestGetAuthorization(t *testing.T) {

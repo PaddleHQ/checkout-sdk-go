@@ -1,6 +1,6 @@
 package accounts
 
-import "github.com/checkout/checkout-sdk-go/common"
+import "github.com/PaddleHQ/checkout-sdk-go/common"
 
 type File struct {
 	File    string

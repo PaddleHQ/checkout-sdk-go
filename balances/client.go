@@ -1,9 +1,9 @@
 package balances
 
 import (
-	"github.com/checkout/checkout-sdk-go/client"
-	"github.com/checkout/checkout-sdk-go/common"
-	"github.com/checkout/checkout-sdk-go/configuration"
+	"github.com/PaddleHQ/checkout-sdk-go/client"
+	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/configuration"
 )
 
 type Client struct {

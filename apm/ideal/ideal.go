@@ -1,6 +1,6 @@
 package ideal
 
-import "github.com/checkout/checkout-sdk-go/common"
+import "github.com/PaddleHQ/checkout-sdk-go/common"
 
 const (
 	idealExternalPath = "ideal-external"

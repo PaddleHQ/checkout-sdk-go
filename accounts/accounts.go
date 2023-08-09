@@ -1,7 +1,7 @@
 package accounts
 
 import (
-	"github.com/checkout/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/common"
 )
 
 const (

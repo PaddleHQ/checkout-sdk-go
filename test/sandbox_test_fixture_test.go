@@ -6,11 +6,11 @@ import (
 	"os"
 	"time"
 
-	"github.com/checkout/checkout-sdk-go"
-	"github.com/checkout/checkout-sdk-go/abc"
-	"github.com/checkout/checkout-sdk-go/common"
-	"github.com/checkout/checkout-sdk-go/configuration"
-	"github.com/checkout/checkout-sdk-go/nas"
+	"github.com/PaddleHQ/checkout-sdk-go"
+	"github.com/PaddleHQ/checkout-sdk-go/abc"
+	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/configuration"
+	"github.com/PaddleHQ/checkout-sdk-go/nas"
 )
 
 const MaxRetryAttemps = 10

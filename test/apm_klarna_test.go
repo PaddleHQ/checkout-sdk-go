@@ -7,9 +7,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/checkout/checkout-sdk-go/apm/klarna"
-	"github.com/checkout/checkout-sdk-go/common"
-	"github.com/checkout/checkout-sdk-go/errors"
+	"github.com/PaddleHQ/checkout-sdk-go/apm/klarna"
+	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/errors"
 )
 
 func TestCreateCreditSession(t *testing.T) {

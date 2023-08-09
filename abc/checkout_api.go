@@ -1,22 +1,22 @@
 package abc
 
 import (
-	"github.com/checkout/checkout-sdk-go/apm/ideal"
-	"github.com/checkout/checkout-sdk-go/apm/klarna"
-	"github.com/checkout/checkout-sdk-go/apm/sepa"
-	"github.com/checkout/checkout-sdk-go/client"
-	"github.com/checkout/checkout-sdk-go/configuration"
-	"github.com/checkout/checkout-sdk-go/customers"
-	"github.com/checkout/checkout-sdk-go/disputes"
-	events "github.com/checkout/checkout-sdk-go/events/abc"
-	"github.com/checkout/checkout-sdk-go/instruments/abc"
-	payments "github.com/checkout/checkout-sdk-go/payments/abc"
-	"github.com/checkout/checkout-sdk-go/payments/hosted"
-	"github.com/checkout/checkout-sdk-go/payments/links"
-	"github.com/checkout/checkout-sdk-go/reconciliation"
-	"github.com/checkout/checkout-sdk-go/sources"
-	"github.com/checkout/checkout-sdk-go/tokens"
-	webhooks "github.com/checkout/checkout-sdk-go/webhooks/abc"
+	"github.com/PaddleHQ/checkout-sdk-go/apm/ideal"
+	"github.com/PaddleHQ/checkout-sdk-go/apm/klarna"
+	"github.com/PaddleHQ/checkout-sdk-go/apm/sepa"
+	"github.com/PaddleHQ/checkout-sdk-go/client"
+	"github.com/PaddleHQ/checkout-sdk-go/configuration"
+	"github.com/PaddleHQ/checkout-sdk-go/customers"
+	"github.com/PaddleHQ/checkout-sdk-go/disputes"
+	events "github.com/PaddleHQ/checkout-sdk-go/events/abc"
+	"github.com/PaddleHQ/checkout-sdk-go/instruments/abc"
+	payments "github.com/PaddleHQ/checkout-sdk-go/payments/abc"
+	"github.com/PaddleHQ/checkout-sdk-go/payments/hosted"
+	"github.com/PaddleHQ/checkout-sdk-go/payments/links"
+	"github.com/PaddleHQ/checkout-sdk-go/reconciliation"
+	"github.com/PaddleHQ/checkout-sdk-go/sources"
+	"github.com/PaddleHQ/checkout-sdk-go/tokens"
+	webhooks "github.com/PaddleHQ/checkout-sdk-go/webhooks/abc"
 )
 
 type Api struct {

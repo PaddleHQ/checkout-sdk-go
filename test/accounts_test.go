@@ -8,12 +8,12 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/checkout/checkout-sdk-go"
-	"github.com/checkout/checkout-sdk-go/accounts"
-	"github.com/checkout/checkout-sdk-go/common"
-	"github.com/checkout/checkout-sdk-go/configuration"
-	"github.com/checkout/checkout-sdk-go/errors"
-	"github.com/checkout/checkout-sdk-go/nas"
+	"github.com/PaddleHQ/checkout-sdk-go"
+	"github.com/PaddleHQ/checkout-sdk-go/accounts"
+	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/configuration"
+	"github.com/PaddleHQ/checkout-sdk-go/errors"
+	"github.com/PaddleHQ/checkout-sdk-go/nas"
 )
 
 var (

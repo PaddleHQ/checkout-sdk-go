@@ -9,13 +9,13 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/checkout/checkout-sdk-go/common"
-	"github.com/checkout/checkout-sdk-go/disputes"
-	"github.com/checkout/checkout-sdk-go/errors"
-	"github.com/checkout/checkout-sdk-go/payments"
-	"github.com/checkout/checkout-sdk-go/payments/abc"
-	"github.com/checkout/checkout-sdk-go/payments/abc/sources"
-	"github.com/checkout/checkout-sdk-go/tokens"
+	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/disputes"
+	"github.com/PaddleHQ/checkout-sdk-go/errors"
+	"github.com/PaddleHQ/checkout-sdk-go/payments"
+	"github.com/PaddleHQ/checkout-sdk-go/payments/abc"
+	"github.com/PaddleHQ/checkout-sdk-go/payments/abc/sources"
+	"github.com/PaddleHQ/checkout-sdk-go/tokens"
 )
 
 var (

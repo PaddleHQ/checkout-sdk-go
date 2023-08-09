@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/checkout/checkout-sdk-go/payments"
+	"github.com/PaddleHQ/checkout-sdk-go/payments"
 )
 
 func TestVoidCardPaymentPrevious(t *testing.T) {

@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/checkout/checkout-sdk-go/payments/nas"
+	"github.com/PaddleHQ/checkout-sdk-go/payments/nas"
 )
 
 func TestGetPaymentActions(t *testing.T) {

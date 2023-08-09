@@ -1,8 +1,8 @@
 package checkout
 
 import (
-	"github.com/checkout/checkout-sdk-go/abc"
-	"github.com/checkout/checkout-sdk-go/nas"
+	"github.com/PaddleHQ/checkout-sdk-go/abc"
+	"github.com/PaddleHQ/checkout-sdk-go/nas"
 )
 
 type CheckoutSdkBuilder struct{}
