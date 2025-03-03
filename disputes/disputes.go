@@ -112,20 +112,21 @@ type (
 	}
 
 	DisputeSummary struct {
-		Id                 string          `json:"id,omitempty"`
-		Category           DisputeCategory `json:"category,omitempty"`
-		Status             DisputeStatus   `json:"status,omitempty"`
-		Amount             int64           `json:"amount,omitempty"`
-		Currency           common.Currency `json:"currency,omitempty"`
-		ReasonCode         string          `json:"reason_code,omitempty"`
-		PaymentId          string          `json:"payment_id,omitempty"`
-		PaymentActionId    string          `json:"payment_action_id,omitempty"`
-		PaymentReference   string          `json:"payment_reference,omitempty"`
-		PaymentArn         string          `json:"payment_arn,omitempty"`
-		PaymentMethod      string          `json:"payment_method,omitempty"`
-		EvidenceRequiredBy *time.Time      `json:"evidence_required_by,omitempty"`
-		ReceivedOn         *time.Time      `json:"received_on,omitempty"`
-		LastUpdate         *time.Time      `json:"last_update,omitempty"`
+		Id                 string                `json:"id,omitempty"`
+		Category           DisputeCategory       `json:"category,omitempty"`
+		Status             DisputeStatus         `json:"status,omitempty"`
+		Amount             int64                 `json:"amount,omitempty"`
+		Currency           common.Currency       `json:"currency,omitempty"`
+		ResolvedReason     DisputeResolvedReason `json:"resolved_reason,omitempty"`
+		ReasonCode         string                `json:"reason_code,omitempty"`
+		PaymentId          string                `json:"payment_id,omitempty"`
+		PaymentActionId    string                `json:"payment_action_id,omitempty"`
+		PaymentReference   string                `json:"payment_reference,omitempty"`
+		PaymentArn         string                `json:"payment_arn,omitempty"`
+		PaymentMethod      string                `json:"payment_method,omitempty"`
+		EvidenceRequiredBy *time.Time            `json:"evidence_required_by,omitempty"`
+		ReceivedOn         *time.Time            `json:"received_on,omitempty"`
+		LastUpdate         *time.Time            `json:"last_update,omitempty"`
 
 		// Not available on Previous
 		EntityId    string `json:"entity_id,omitempty"`
