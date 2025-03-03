@@ -29,7 +29,6 @@ func TestCreateHostedPaymentsPageSession(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, response.HttpMetadata.StatusCode)
 				assert.NotNil(t, response.Id)
 				assert.NotNil(t, response.Reference)
-				assert.NotNil(t, response.Warnings)
 				assert.NotNil(t, response.Links)
 				assert.Equal(t, Reference, response.Reference)
 				assert.NotNil(t, response.Links["redirect"])
@@ -118,6 +117,7 @@ func getHostedPaymentRequest() *hosted.HostedPaymentRequest {
 			Name: Name,
 			City: "London",
 		},
+		DisplayName: "**Test Hosted Payment**",
 		Reference:   Reference,
 		Description: Description,
 		Customer: &common.CustomerRequest{

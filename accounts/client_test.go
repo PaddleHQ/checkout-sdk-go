@@ -126,14 +126,220 @@ func TestCreateEntity(t *testing.T) {
 			filesClient := new(mocks.ApiClientMock)
 			credentials := new(mocks.CredentialsMock)
 			environment := new(mocks.EnvironmentMock)
+			enableTelemertry := true
 
 			tc.getAuthorization(&credentials.Mock)
 			tc.apiPost(&apiClient.Mock)
 
-			configuration := configuration.NewConfiguration(credentials, environment, &http.Client{}, nil)
+			configuration := configuration.NewConfiguration(credentials, &enableTelemertry, environment, &http.Client{}, nil)
 			client := NewClient(configuration, apiClient, filesClient)
 
 			tc.checker(client.CreateEntity(tc.request))
+		})
+	}
+}
+
+func TestGetSubEntityMembers(t *testing.T) {
+	var (
+		entityId = "ent_1234"
+
+		subEntityDetails = OnboardSubEntityDetailsResponse{
+			HttpMetadata: mocks.HttpMetadataStatusOk,
+			Data:         []SubEntityMemberData{{UserId: "member_1234"}},
+			Links:        map[string]common.Link{"self": {HRef: &[]string{"https://example.com"}[0]}},
+		}
+	)
+
+	cases := []struct {
+		name             string
+		entityId         string
+		getAuthorization func(*mock.Mock) mock.Call
+		apiGet           func(*mock.Mock) mock.Call
+		checker          func(*OnboardSubEntityDetailsResponse, error)
+	}{
+		{
+			name:     "when members exist then return sub-entity members",
+			entityId: entityId,
+			getAuthorization: func(m *mock.Mock) mock.Call {
+				return *m.On("GetAuthorization", mock.Anything).
+					Return(&configuration.SdkAuthorization{}, nil)
+			},
+			apiGet: func(m *mock.Mock) mock.Call {
+				return *m.On("GetWithContext", mock.Anything, mock.Anything, mock.Anything, mock.Anything).
+					Return(nil).
+					Run(func(args mock.Arguments) {
+						respMapping := args.Get(3).(*OnboardSubEntityDetailsResponse)
+						*respMapping = subEntityDetails
+					})
+			},
+			checker: func(response *OnboardSubEntityDetailsResponse, err error) {
+				assert.Nil(t, err)
+				assert.NotNil(t, response)
+				assert.Equal(t, http.StatusOK, response.HttpMetadata.StatusCode)
+			},
+		},
+		{
+			name:     "when sub-entity has no members then return empty list",
+			entityId: entityId,
+			getAuthorization: func(m *mock.Mock) mock.Call {
+				return *m.On("GetAuthorization", mock.Anything).
+					Return(&configuration.SdkAuthorization{}, nil)
+			},
+			apiGet: func(m *mock.Mock) mock.Call {
+				return *m.On("GetWithContext", mock.Anything, mock.Anything, mock.Anything, mock.Anything).
+					Return(nil).
+					Run(func(args mock.Arguments) {
+						respMapping := args.Get(3).(*OnboardSubEntityDetailsResponse)
+						*respMapping = OnboardSubEntityDetailsResponse{
+							HttpMetadata: mocks.HttpMetadataStatusOk,
+							Data:         []SubEntityMemberData{},
+							Links:        map[string]common.Link{"self": {HRef: &[]string{"https://example.com"}[0]}},
+						}
+					})
+			},
+			checker: func(response *OnboardSubEntityDetailsResponse, err error) {
+				assert.Nil(t, err)
+				assert.NotNil(t, response)
+				assert.Equal(t, http.StatusOK, response.HttpMetadata.StatusCode)
+				assert.Empty(t, response.Data)
+			},
+		},
+		{
+			name:     "when entity not found then return error",
+			entityId: "not_found",
+			getAuthorization: func(m *mock.Mock) mock.Call {
+				return *m.On("GetAuthorization", mock.Anything).
+					Return(&configuration.SdkAuthorization{}, nil)
+			},
+			apiGet: func(m *mock.Mock) mock.Call {
+				return *m.On("GetWithContext", mock.Anything, mock.Anything, mock.Anything, mock.Anything).
+					Return(
+						errors.CheckoutAPIError{
+							StatusCode: http.StatusNotFound,
+							Status:     "404 Not Found",
+						})
+			},
+			checker: func(response *OnboardSubEntityDetailsResponse, err error) {
+				assert.Nil(t, response)
+				assert.NotNil(t, err)
+				chkErr := err.(errors.CheckoutAPIError)
+				assert.Equal(t, http.StatusNotFound, chkErr.StatusCode)
+			},
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			apiClient := new(mocks.ApiClientMock)
+			filesClient := new(mocks.ApiClientMock)
+			credentials := new(mocks.CredentialsMock)
+			environment := new(mocks.EnvironmentMock)
+			enableTelemetry := true
+
+			tc.getAuthorization(&credentials.Mock)
+			tc.apiGet(&apiClient.Mock)
+
+			configuration := configuration.NewConfiguration(credentials, &enableTelemetry, environment, &http.Client{}, nil)
+			client := NewClient(configuration, apiClient, filesClient)
+
+			tc.checker(client.GetSubEntityMembers(tc.entityId))
+		})
+	}
+}
+
+func TestReinviteSubEntityMember(t *testing.T) {
+	var (
+		entityId = "ent_1234"
+		userId   = "user_5678"
+
+		reinviteResponse = OnboardSubEntityResponse{
+			HttpMetadata: mocks.HttpMetadataStatusOk,
+			Response: map[string]interface{}{
+				"invitation": "https://example.com/invitation",
+			},
+		}
+
+		reinviteRequest = OnboardSubEntityRequest{
+			Request: map[string]interface{}{
+				"email": "new.email@example.com",
+			},
+		}
+	)
+
+	cases := []struct {
+		name             string
+		entityId         string
+		userId           string
+		request          OnboardSubEntityRequest
+		getAuthorization func(*mock.Mock) mock.Call
+		apiPut           func(*mock.Mock) mock.Call
+		checker          func(*OnboardSubEntityResponse, error)
+	}{
+		{
+			name:     "when request is correct then reinvite sub-entity member",
+			entityId: entityId,
+			userId:   userId,
+			request:  reinviteRequest,
+			getAuthorization: func(m *mock.Mock) mock.Call {
+				return *m.On("GetAuthorization", mock.Anything).
+					Return(&configuration.SdkAuthorization{}, nil)
+			},
+			apiPut: func(m *mock.Mock) mock.Call {
+				return *m.On("PutWithContext", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).
+					Return(nil).
+					Run(func(args mock.Arguments) {
+						respMapping := args.Get(4).(*OnboardSubEntityResponse)
+						*respMapping = reinviteResponse
+					})
+			},
+			checker: func(response *OnboardSubEntityResponse, err error) {
+				assert.Nil(t, err)
+				assert.NotNil(t, response)
+				assert.Equal(t, http.StatusOK, response.HttpMetadata.StatusCode)
+				assert.Equal(t, reinviteResponse.Response["invitation"], response.Response["invitation"])
+			},
+		},
+		{
+			name:     "when sub-entity member not found then return error",
+			entityId: entityId,
+			userId:   "not_found",
+			request:  reinviteRequest,
+			getAuthorization: func(m *mock.Mock) mock.Call {
+				return *m.On("GetAuthorization", mock.Anything).
+					Return(&configuration.SdkAuthorization{}, nil)
+			},
+			apiPut: func(m *mock.Mock) mock.Call {
+				return *m.On("PutWithContext", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).
+					Return(
+						errors.CheckoutAPIError{
+							StatusCode: http.StatusNotFound,
+							Status:     "404 Not Found",
+						})
+			},
+			checker: func(response *OnboardSubEntityResponse, err error) {
+				assert.Nil(t, response)
+				assert.NotNil(t, err)
+				chkErr := err.(errors.CheckoutAPIError)
+				assert.Equal(t, http.StatusNotFound, chkErr.StatusCode)
+			},
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			apiClient := new(mocks.ApiClientMock)
+			filesClient := new(mocks.ApiClientMock)
+			credentials := new(mocks.CredentialsMock)
+			environment := new(mocks.EnvironmentMock)
+			enableTelemetry := true
+
+			tc.getAuthorization(&credentials.Mock)
+			tc.apiPut(&apiClient.Mock)
+
+			configuration := configuration.NewConfiguration(credentials, &enableTelemetry, environment, &http.Client{}, nil)
+			client := NewClient(configuration, apiClient, filesClient)
+
+			tc.checker(client.ReinviteSubEntityMember(tc.entityId, tc.userId, tc.request))
 		})
 	}
 }
@@ -231,7 +437,7 @@ func TestGetEntity(t *testing.T) {
 					Return(nil, errors.CheckoutAuthorizationError("Invalid authorization type"))
 			},
 			apiGet: func(m *mock.Mock) mock.Call {
-				return *m.On("Get", mock.Anything, mock.Anything, mock.Anything).
+				return *m.On("GetWithContext", mock.Anything, mock.Anything, mock.Anything, mock.Anything).
 					Return(nil)
 			},
 			checker: func(response *OnboardEntityDetails, err error) {
@@ -249,11 +455,12 @@ func TestGetEntity(t *testing.T) {
 			filesClient := new(mocks.ApiClientMock)
 			credentials := new(mocks.CredentialsMock)
 			environment := new(mocks.EnvironmentMock)
+			enableTelemetry := true
 
 			tc.getAuthorization(&credentials.Mock)
 			tc.apiGet(&apiClient.Mock)
 
-			configuration := configuration.NewConfiguration(credentials, environment, &http.Client{}, nil)
+			configuration := configuration.NewConfiguration(credentials, &enableTelemetry, environment, &http.Client{}, nil)
 			client := NewClient(configuration, apiClient, filesClient)
 
 			tc.checker(client.GetEntity(tc.entityId))
@@ -369,11 +576,12 @@ func TestUpdateEntity(t *testing.T) {
 			filesClient := new(mocks.ApiClientMock)
 			credentials := new(mocks.CredentialsMock)
 			environment := new(mocks.EnvironmentMock)
+			enableTelemertry := true
 
 			tc.getAuthorization(&credentials.Mock)
 			tc.apiPut(&apiClient.Mock)
 
-			configuration := configuration.NewConfiguration(credentials, environment, &http.Client{}, nil)
+			configuration := configuration.NewConfiguration(credentials, &enableTelemertry, environment, &http.Client{}, nil)
 			client := NewClient(configuration, apiClient, filesClient)
 
 			tc.checker(client.UpdateEntity(tc.entityId, tc.request))
@@ -527,11 +735,12 @@ func TestCreatePaymentInstruments(t *testing.T) {
 			filesClient := new(mocks.ApiClientMock)
 			credentials := new(mocks.CredentialsMock)
 			environment := new(mocks.EnvironmentMock)
+			enableTelemertry := true
 
 			tc.getAuthorization(&credentials.Mock)
 			tc.apiPost(&apiClient.Mock)
 
-			configuration := configuration.NewConfiguration(credentials, environment, &http.Client{}, nil)
+			configuration := configuration.NewConfiguration(credentials, &enableTelemertry, environment, &http.Client{}, nil)
 			client := NewClient(configuration, apiClient, filesClient)
 
 			tc.checker(client.CreatePaymentInstruments(tc.entityId, tc.paymentInstrument))
@@ -675,11 +884,12 @@ func TestCreatePaymentInstrument(t *testing.T) {
 			filesClient := new(mocks.ApiClientMock)
 			credentials := new(mocks.CredentialsMock)
 			environment := new(mocks.EnvironmentMock)
+			enableTelemertry := true
 
 			tc.getAuthorization(&credentials.Mock)
 			tc.apiPost(&apiClient.Mock)
 
-			configuration := configuration.NewConfiguration(credentials, environment, &http.Client{}, nil)
+			configuration := configuration.NewConfiguration(credentials, &enableTelemertry, environment, &http.Client{}, nil)
 			client := NewClient(configuration, apiClient, filesClient)
 
 			tc.checker(client.CreatePaymentInstrument(tc.entityId, tc.paymentInstrumentRequest))
@@ -824,11 +1034,12 @@ func TestQueryPaymentInstruments(t *testing.T) {
 			filesClient := new(mocks.ApiClientMock)
 			credentials := new(mocks.CredentialsMock)
 			environment := new(mocks.EnvironmentMock)
+			enableTelemertry := true
 
 			tc.getAuthorization(&credentials.Mock)
 			tc.apiGet(&apiClient.Mock)
 
-			configuration := configuration.NewConfiguration(credentials, environment, &http.Client{}, nil)
+			configuration := configuration.NewConfiguration(credentials, &enableTelemertry, environment, &http.Client{}, nil)
 			client := NewClient(configuration, apiClient, filesClient)
 
 			tc.checker(client.QueryPaymentInstruments(tc.entityId, tc.query))
@@ -973,11 +1184,12 @@ func TestRetrievePaymentInstrumentDetails(t *testing.T) {
 			filesClient := new(mocks.ApiClientMock)
 			credentials := new(mocks.CredentialsMock)
 			environment := new(mocks.EnvironmentMock)
+			enableTelemertry := true
 
 			tc.getAuthorization(&credentials.Mock)
 			tc.apiGet(&apiClient.Mock)
 
-			configuration := configuration.NewConfiguration(credentials, environment, &http.Client{}, nil)
+			configuration := configuration.NewConfiguration(credentials, &enableTelemertry, environment, &http.Client{}, nil)
 			client := NewClient(configuration, apiClient, filesClient)
 
 			tc.checker(client.RetrievePaymentInstrumentDetails(tc.entityId, tc.paymentInstrumentId))
@@ -1096,11 +1308,12 @@ func TestUpdatePaymentInstrumentDetails(t *testing.T) {
 			filesClient := new(mocks.ApiClientMock)
 			credentials := new(mocks.CredentialsMock)
 			environment := new(mocks.EnvironmentMock)
+			enableTelemertry := true
 
 			tc.getAuthorization(&credentials.Mock)
 			tc.apiPut(&apiClient.Mock)
 
-			configuration := configuration.NewConfiguration(credentials, environment, &http.Client{}, nil)
+			configuration := configuration.NewConfiguration(credentials, &enableTelemertry, environment, &http.Client{}, nil)
 			client := NewClient(configuration, apiClient, filesClient)
 
 			tc.checker(client.UpdatePaymentInstrumentDetails(tc.entityId, tc.instrumentId, tc.request))
@@ -1189,11 +1402,12 @@ func TestGetPayoutSchedule(t *testing.T) {
 			filesClient := new(mocks.ApiClientMock)
 			credentials := new(mocks.CredentialsMock)
 			environment := new(mocks.EnvironmentMock)
+			enableTelemertry := true
 
 			tc.getAuthorization(&credentials.Mock)
 			tc.apiGet(&apiClient.Mock)
 
-			configuration := configuration.NewConfiguration(credentials, environment, &http.Client{}, nil)
+			configuration := configuration.NewConfiguration(credentials, &enableTelemertry, environment, &http.Client{}, nil)
 			client := NewClient(configuration, apiClient, filesClient)
 
 			tc.checker(client.RetrievePayoutSchedule(tc.entityId))
@@ -1283,11 +1497,12 @@ func TestUpdatePayoutSchedule(t *testing.T) {
 			filesClient := new(mocks.ApiClientMock)
 			credentials := new(mocks.CredentialsMock)
 			environment := new(mocks.EnvironmentMock)
+			enableTelemertry := true
 
 			tc.getAuthorization(&credentials.Mock)
 			tc.apiPut(&apiClient.Mock)
 
-			configuration := configuration.NewConfiguration(credentials, environment, &http.Client{}, nil)
+			configuration := configuration.NewConfiguration(credentials, &enableTelemertry, environment, &http.Client{}, nil)
 			client := NewClient(configuration, apiClient, filesClient)
 
 			tc.checker(client.UpdatePayoutSchedule(tc.entityId, tc.currency, tc.request))

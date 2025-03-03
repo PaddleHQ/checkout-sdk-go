@@ -9,9 +9,10 @@ import (
 
 type (
 	SourceResponse struct {
-		ResponseCardSource            *ResponseCardSource
-		ResponseCurrencyAccountSource *ResponseCurrencyAccountSource
-		AlternativeResponse           *common.AlternativeResponse
+		ResponseCardSource                  *ResponseCardSource
+		ResponseCurrencyAccountSource       *ResponseCurrencyAccountSource
+		PaymentContextsPayPayResponseSource *PaymentContextsPayPayResponseSource
+		AlternativeResponse                 *common.AlternativeResponse
 	}
 
 	ResponseCardSource struct {
@@ -24,25 +25,31 @@ type (
 		Name           string              `json:"name,omitempty"`
 		Scheme         string              `json:"scheme,omitempty"`
 		// Deprecated: This property will be removed in the future, and should not be used. Use LocalSchemes instead.
-		SchemeLocal             string              `json:"scheme_local,omitempty"`
-		LocalSchemes            []string            `json:"local_schemes,omitempty"`
-		Last4                   string              `json:"last4,omitempty"`
-		Fingerprint             string              `json:"fingerprint,omitempty"`
-		Bin                     string              `json:"bin,omitempty"`
-		CardType                common.CardType     `json:"card_type,omitempty"`
-		CardCategory            common.CardCategory `json:"card_category,omitempty"`
-		Issuer                  string              `json:"issuer,omitempty"`
-		IssuerCountry           common.Country      `json:"issuer_country,omitempty"`
-		ProductId               string              `json:"product_id,omitempty"`
-		ProductType             string              `json:"product_type,omitempty"`
-		AvsCheck                string              `json:"avs_check,omitempty"`
-		CvvCheck                string              `json:"cvv_check,omitempty"`
-		PaymentAccountReference string              `json:"payment_account_reference,omitempty"`
+		SchemeLocal             string                `json:"scheme_local,omitempty"`
+		LocalSchemes            []string              `json:"local_schemes,omitempty"`
+		Last4                   string                `json:"last4,omitempty"`
+		Fingerprint             string                `json:"fingerprint,omitempty"`
+		Bin                     string                `json:"bin,omitempty"`
+		CardType                common.CardType       `json:"card_type,omitempty"`
+		CardCategory            common.CardCategory   `json:"card_category,omitempty"`
+		CardWalletType          common.CardWalletType `json:"card_wallet_type,omitempty"`
+		Issuer                  string                `json:"issuer,omitempty"`
+		IssuerCountry           common.Country        `json:"issuer_country,omitempty"`
+		ProductId               string                `json:"product_id,omitempty"`
+		ProductType             string                `json:"product_type,omitempty"`
+		AvsCheck                string                `json:"avs_check,omitempty"`
+		CvvCheck                string                `json:"cvv_check,omitempty"`
+		PaymentAccountReference string                `json:"payment_account_reference,omitempty"`
+		EncryptedCardNumber     string                `json:"encrypted_card_number,omitempty"`
 	}
 
 	ResponseCurrencyAccountSource struct {
 		Type   payments.SourceType `json:"type,omitempty"`
 		Amount int                 `json:"amount,omitempty"`
+	}
+
+	PaymentContextsPayPayResponseSource struct {
+		Type payments.SourceType `json:"type,omitempty"`
 	}
 )
 
@@ -65,6 +72,12 @@ func (s *SourceResponse) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		s.ResponseCurrencyAccountSource = &typeMapping
+	case string(payments.PayPalSource):
+		var typeMapping PaymentContextsPayPayResponseSource
+		if err := json.Unmarshal(data, &typeMapping); err != nil {
+			return err
+		}
+		s.PaymentContextsPayPayResponseSource = &typeMapping
 	default:
 		var typeMapping common.AlternativeResponse
 		if err := json.Unmarshal(data, &typeMapping); err != nil {

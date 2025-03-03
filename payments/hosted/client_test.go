@@ -16,7 +16,7 @@ import (
 
 func TestCreateHostedPaymentsPageSession(t *testing.T) {
 	var (
-		hostedPayementResponse = HostedPaymentResponse{
+		hostedPaymentResponse = HostedPaymentResponse{
 			HttpMetadata: mocks.HttpMetadataStatusCreated,
 			Id:           "pay_1234",
 			Reference:    "reference",
@@ -48,7 +48,7 @@ func TestCreateHostedPaymentsPageSession(t *testing.T) {
 					Return(nil).
 					Run(func(args mock.Arguments) {
 						respMapping := args.Get(4).(*HostedPaymentResponse)
-						*respMapping = hostedPayementResponse
+						*respMapping = hostedPaymentResponse
 					})
 			},
 			checker: func(response *HostedPaymentResponse, err error) {
@@ -105,11 +105,12 @@ func TestCreateHostedPaymentsPageSession(t *testing.T) {
 			apiClient := new(mocks.ApiClientMock)
 			credentials := new(mocks.CredentialsMock)
 			environment := new(mocks.EnvironmentMock)
+			enableTelemetry := true
 
 			tc.getAuthorization(&credentials.Mock)
 			tc.apiPost(&apiClient.Mock)
 
-			configuration := configuration.NewConfiguration(credentials, environment, &http.Client{}, nil)
+			configuration := configuration.NewConfiguration(credentials, &enableTelemetry, environment, &http.Client{}, nil)
 			client := NewClient(configuration, apiClient)
 
 			tc.checker(client.CreateHostedPaymentsPageSession(tc.request))
@@ -211,11 +212,12 @@ func TestGetHostedPaymentsPageDetails(t *testing.T) {
 			apiClient := new(mocks.ApiClientMock)
 			credentials := new(mocks.CredentialsMock)
 			environment := new(mocks.EnvironmentMock)
+			enableTelemetry := true
 
 			tc.getAuthorization(&credentials.Mock)
 			tc.apiGet(&apiClient.Mock)
 
-			configuration := configuration.NewConfiguration(credentials, environment, &http.Client{}, nil)
+			configuration := configuration.NewConfiguration(credentials, &enableTelemetry, environment, &http.Client{}, nil)
 			client := NewClient(configuration, apiClient)
 
 			tc.checker(client.GetHostedPaymentsPageDetails(tc.hostedPaymentId))

@@ -28,21 +28,26 @@ type HttpClient interface {
 }
 
 type ApiClient struct {
-	HttpClient http.Client
-	BaseUri    string
-	Log        configuration.StdLogger
+	HttpClient          http.Client
+	BaseUri             string
+	EnableTelemetry     bool
+	RequestMetricsQueue common.TelemetryQueue
+	Log                 configuration.StdLogger
 }
 
 const (
-	CkoRequestId = "cko-request-id"
-	CkoVersion   = "cko-version"
+	CkoRequestId       = "cko-request-id"
+	CkoVersion         = "cko-version"
+	CkoTelemetryHeader = "cko-sdk-telemetry"
 )
 
 func NewApiClient(configuration *configuration.Configuration, baseUri string) *ApiClient {
 	return &ApiClient{
-		HttpClient: configuration.HttpClient,
-		BaseUri:    baseUri,
-		Log:        configuration.Logger,
+		HttpClient:          configuration.HttpClient,
+		BaseUri:             baseUri,
+		EnableTelemetry:     configuration.EnableTelemetry,
+		RequestMetricsQueue: *common.NewTelemetryQueue(),
+		Log:                 configuration.Logger,
 	}
 }
 

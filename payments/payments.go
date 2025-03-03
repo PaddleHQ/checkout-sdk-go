@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/PaddleHQ/checkout-sdk-go/common"
+	"github.com/PaddleHQ/checkout-sdk-go/sessions"
 )
 
 const PathPayments = "payments"
@@ -154,6 +155,22 @@ const (
 	C55 FundTransferType = "C55"
 )
 
+type PaymentContextsShippingMethod string
+
+const (
+	Digital        PaymentContextsShippingMethod = "Digital"
+	PickUp         PaymentContextsShippingMethod = "PickUp"
+	BillingAddress PaymentContextsShippingMethod = "BillingAddress"
+	OtherAddress   PaymentContextsShippingMethod = "OtherAddress"
+)
+
+type PanProcessedType string
+
+const (
+	FPAN PanProcessedType = "fpan"
+	DPAN PanProcessedType = "dpan"
+)
+
 type (
 	AirlineData struct {
 		Ticket           *Ticket            `json:"ticket,omitempty"`
@@ -202,9 +219,27 @@ type (
 	}
 
 	ShippingDetails struct {
-		Address        *common.Address `json:"address,omitempty"`
-		Phone          *common.Phone   `json:"phone,omitempty"`
-		FromAddressZip string          `json:"from_address_zip,omitempty"`
+		FirstName      string                        `json:"first_name,omitempty"`
+		LastName       string                        `json:"last_name,omitempty"`
+		Email          string                        `json:"email,omitempty"`
+		Address        *common.Address               `json:"address,omitempty"`
+		Phone          *common.Phone                 `json:"phone,omitempty"`
+		FromAddressZip string                        `json:"from_address_zip,omitempty"`
+		Timeframe      sessions.DeliveryTimeframe    `json:"time_frame,omitempty"`
+		Method         PaymentContextsShippingMethod `json:"method,omitempty"`
+		Delay          int                           `json:"delay,omitempty"`
+	}
+
+	PaymentSegment struct {
+		Brand            string `json:"brand,omitempty"`
+		BusinessCategory string `json:"business_category,omitempty"`
+		Market           string `json:"market,omitempty"`
+	}
+
+	PaymentRetryRequest struct {
+		Enabled      bool `json:"enabled,omitempty"`
+		MaxAttempts  int  `json:"max_attempts,omitempty"`
+		EndAfterDays int  `json:"end_after_days,omitempty"`
 	}
 
 	BillingDescriptor struct {
@@ -300,21 +335,34 @@ type (
 	}
 
 	PaymentProcessing struct {
-		RetrievalReferenceNumber         string   `json:"retrieval_reference_number,omitempty"`
-		AcquirerTransactionId            string   `json:"acquirer_transaction_id,omitempty"`
-		RecommendationCode               string   `json:"recommendation_code,omitempty"`
-		PartnerOrderId                   string   `json:"partner_order_id,omitempty"`
-		PartnerSessionId                 string   `json:"partner_session_id,omitempty"`
-		PartnerClientToken               string   `json:"partner_client_token,omitempty"`
-		PartnerPaymentId                 string   `json:"partner_payment_id,omitempty"`
-		ContinuationPayload              string   `json:"continuation_payload,omitempty"`
-		Pun                              string   `json:"pun,omitempty"`
-		PartnerStatus                    string   `json:"partner_status,omitempty"`
-		PartnerTransactionId             string   `json:"partner_transaction_id,omitempty"`
-		PartnerErrorCodes                []string `json:"partner_error_codes,omitempty"`
-		PartnerErrorMessage              string   `json:"partner_error_message,omitempty"`
-		PartnerAuthorizationCode         string   `json:"partner_authorization_code,omitempty"`
-		PartnerAuthorizationResponseCode string   `json:"partner_authorization_response_code,omitempty"`
+		RetrievalReferenceNumber         string           `json:"retrieval_reference_number,omitempty"`
+		AcquirerTransactionId            string           `json:"acquirer_transaction_id,omitempty"`
+		RecommendationCode               string           `json:"recommendation_code,omitempty"`
+		Scheme                           string           `json:"scheme,omitempty"`
+		PartnerMerchantAdviceCode        string           `json:"partner_merchant_advice_code,omitempty"`
+		PartnerResponseCode              string           `json:"partner_response_code,omitempty"`
+		PartnerOrderId                   string           `json:"partner_order_id,omitempty"`
+		PartnerSessionId                 string           `json:"partner_session_id,omitempty"`
+		PartnerClientToken               string           `json:"partner_client_token,omitempty"`
+		PartnerPaymentId                 string           `json:"partner_payment_id,omitempty"`
+		PanTypeProcessed                 PanProcessedType `json:"pan_type_processed,omitempty"`
+		ContinuationPayload              string           `json:"continuation_payload,omitempty"`
+		Pun                              string           `json:"pun,omitempty"`
+		PartnerStatus                    string           `json:"partner_status,omitempty"`
+		PartnerTransactionId             string           `json:"partner_transaction_id,omitempty"`
+		PartnerErrorCodes                []string         `json:"partner_error_codes,omitempty"`
+		PartnerErrorMessage              string           `json:"partner_error_message,omitempty"`
+		PartnerAuthorizationCode         string           `json:"partner_authorization_code,omitempty"`
+		PartnerAuthorizationResponseCode string           `json:"partner_authorization_response_code,omitempty"`
+		SurchargeAmount                  int64            `json:"surcharge_amount,omitempty"`
+		CkoNetworkTokenAvailable         bool             `json:"cko_network_token_available"`
+		MerchantCategoryCode             string           `json:"merchant_category_code,omitempty"`
+	}
+
+	PaymentRetryResponse struct {
+		MaxAttempts   int        `json:"max_attempts,omitempty"`
+		EndsOn        *time.Time `json:"ends_on,omitempty"`
+		NextAttemptOn *time.Time `json:"next_attempt_on,omitempty"`
 	}
 
 	ThreeDsData struct {
@@ -390,6 +438,29 @@ type (
 		Address *common.Address `json:"address,omitempty"`
 		Phone   *common.Phone   `json:"phone,omitempty"`
 	}
+
+	Order struct {
+		Name           string     `json:"name,omitempty"`
+		Quantity       int64      `json:"quantity,omitempty"`
+		UnitPrice      int64      `json:"unit_price,omitempty"`
+		Reference      string     `json:"reference,omitempty"`
+		CommodityCode  string     `json:"commodity_code,omitempty"`
+		UnitOfMeasure  string     `json:"unit_of_measure,omitempty"`
+		TotalAmount    int64      `json:"total_amount,omitempty"`
+		TaxAmount      int64      `json:"tax_amount,omitempty"`
+		DiscountAmount int64      `json:"discount_amount,omitempty"`
+		WxpayGoodsId   string     `json:"wxpay_goods_id,omitempty"`
+		ImageUrl       string     `json:"image_url,omitempty"`
+		Url            string     `json:"url,omitempty"`
+		Type           string     `json:"type,omitempty"`
+		ServiceEndsOn  *time.Time `json:"service_ends_on,omitempty"`
+	}
+
+	PaymentMethodDetails struct {
+		DisplayName string `json:"display_name,omitempty"`
+		Type        string `json:"type,omitempty"`
+		Network     string `json:"network,omitempty"`
+	}
 )
 
 // Request
@@ -400,6 +471,9 @@ type (
 		Metadata  map[string]interface{} `json:"metadata,omitempty"`
 		// Not available on Previous
 		AmountAllocations []common.AmountAllocations `json:"amount_allocations,omitempty"`
+		CaptureActionId   string                     `json:"capture_action_id,omitempty"`
+		Destination       *common.Destination        `json:"destination,omitempty"`
+		Items             []Order                    `json:"items,omitempty"`
 	}
 
 	VoidRequest struct {
@@ -459,6 +533,8 @@ type (
 		Aft                              bool                             `json:"aft,omitempty"`
 		MerchantCategoryCode             string                           `json:"merchant_category_code,omitempty"`
 		SchemeMerchantId                 string                           `json:"scheme_merchant_id,omitempty"`
+		PanTypeProcessed                 PanProcessedType                 `json:"pan_type_processed,omitempty"`
+		CkoNetworkTokenAvailable         bool                             `json:"cko_network_token_available,omitempty"`
 	}
 
 	ProviderAuthorizedPaymentMethod struct {
