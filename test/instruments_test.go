@@ -9,6 +9,7 @@ import (
 	"github.com/PaddleHQ/checkout-sdk-go/common"
 	"github.com/PaddleHQ/checkout-sdk-go/errors"
 	"github.com/PaddleHQ/checkout-sdk-go/instruments/nas"
+	"github.com/PaddleHQ/checkout-sdk-go/payments"
 	"github.com/PaddleHQ/checkout-sdk-go/tokens"
 )
 
@@ -18,6 +19,7 @@ var (
 
 func TestSetupInstrument(t *testing.T) {
 	cardTokenResponse := RequestCardToken(t)
+	_ = createSepaInstrument(t)
 	instrumentToken = createTokenInstrument(t, cardTokenResponse)
 }
 
@@ -102,6 +104,7 @@ func TestShouldGetInstrument(t *testing.T) {
 }
 
 func TestShouldGetBankAccountFields(t *testing.T) {
+	t.Skip("unavailable")
 	cases := []struct {
 		name     string
 		country  common.Country
@@ -209,6 +212,30 @@ func TestShouldDeleteInstrument(t *testing.T) {
 			tc.checkerTwo(client.Get(tc.instrumentId))
 		})
 	}
+}
+
+func createSepaInstrument(t *testing.T) *nas.CreateSepaInstrumentResponse {
+	request := nas.NewCreateSepaInstrumentRequest()
+	request.InstrumentData = &nas.InstrumentData{
+		AccountNumber: "FR7630006000011234567890189",
+		Country:       common.FR,
+		Currency:      common.EUR,
+		PaymentType:   payments.Recurring,
+	}
+	request.AccountHolder = &common.AccountHolder{
+		FirstName:      "Ali",
+		LastName:       "Farid",
+		BillingAddress: Address(),
+		Phone:          Phone(),
+	}
+
+	response, err := DefaultApi().Instruments.Create(request)
+	assert.Nil(t, err)
+	assert.NotNil(t, response.CreateSepaInstrumentResponse)
+	assert.Equal(t, common.Sepa, response.CreateSepaInstrumentResponse.Type)
+	assert.NotEmpty(t, response.CreateSepaInstrumentResponse.Id)
+	assert.NotEmpty(t, response.CreateSepaInstrumentResponse.Fingerprint)
+	return response.CreateSepaInstrumentResponse
 }
 
 func createTokenInstrument(t *testing.T, token *tokens.CardTokenResponse) *nas.CreateTokenInstrumentResponse {

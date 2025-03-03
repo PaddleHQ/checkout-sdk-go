@@ -31,8 +31,18 @@ func (b *CheckoutOAuthSdkBuilder) WithScopes(scopes []string) *CheckoutOAuthSdkB
 	return b
 }
 
+func (b *CheckoutOAuthSdkBuilder) WithEnableTelemetry(telemetry bool) *CheckoutOAuthSdkBuilder {
+	b.EnableTelemetry = &telemetry
+	return b
+}
+
 func (b *CheckoutOAuthSdkBuilder) WithEnvironment(environment configuration.Environment) *CheckoutOAuthSdkBuilder {
 	b.Environment = environment
+	return b
+}
+
+func (b *CheckoutOAuthSdkBuilder) WithEnvironmentSubdomain(subdomain string) *CheckoutOAuthSdkBuilder {
+	b.EnvironmentSubdomain = configuration.NewEnvironmentSubdomain(b.Environment, subdomain)
 	return b
 }
 
@@ -65,7 +75,11 @@ func (b *CheckoutOAuthSdkBuilder) Build() (*Api, error) {
 		return nil, err
 	}
 
-	newConfiguration := configuration.NewConfiguration(sdkCredentials, b.Environment, b.HttpClient, b.Logger)
+	newConfiguration := configuration.NewConfiguration(sdkCredentials, b.EnableTelemetry, b.Environment, b.HttpClient, b.Logger)
+
+	if b.EnvironmentSubdomain != nil {
+		newConfiguration = configuration.NewConfigurationWithSubdomain(sdkCredentials, b.Environment, b.EnvironmentSubdomain, b.HttpClient, b.Logger)
+	}
 
 	return CheckoutApi(newConfiguration), nil
 }
