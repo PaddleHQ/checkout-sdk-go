@@ -5,8 +5,13 @@ on:
       - master
     paths:
       - client/version.go
+permissions:
+  contents: read
+
 jobs:
   build:
+    permissions:
+      contents: write  # for actions/create-release to create a release
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     strategy:
@@ -14,9 +19,14 @@ jobs:
         go:
           - "1.14"
     steps:
-      - uses: actions/checkout@v2
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
       - id: setup-go
-        uses: actions/setup-go@v1
+        uses: actions/setup-go@0caeaed6fd66a828038c2da3c0f662a42862658f # v1.1.3
         with:
           go-version: ${{ matrix.go }}
       - id: build-and-test
@@ -42,7 +52,7 @@ jobs:
       - id: print-version
         run: echo "Releasing $CURRENT_VERSION"
       - id: create-release
-        uses: actions/create-release@v1
+        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e # v1.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
